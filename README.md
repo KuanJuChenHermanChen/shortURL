@@ -39,5 +39,5 @@
 
 ## 開發工具
 
-Docker MongoDB Replica Set
-Docker Node
+- Docker
+
