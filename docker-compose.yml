@@ -1,0 +1,94 @@
+version: '3'
+
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo:latest
+    hostname: mongo1
+    networks:
+      - mongors-networks
+    expose:
+      - 27017
+    ports:
+      - 30001:27017
+    volumes:
+      - mongo-replSet-mongo1:/data/db
+    restart: always
+    command: mongod --replSet my-mongo-set
+
+  mongo2:
+    container_name: mongo2
+    image: mongo:latest
+    hostname: mongo2
+    networks:
+      - mongors-networks
+    expose:
+      - 27017
+    ports:
+      - 30002:27017
+    volumes:
+      - mongo-replSet-mongo2:/data/db
+    restart: always
+    command: mongod --replSet my-mongo-set
+
+  mongo3:
+    container_name: mongo3
+    image: mongo:latest
+    hostname: mongo3
+    networks:
+      - mongors-networks
+    expose:
+      - 27017
+    ports:
+      - 30003:27017
+    volumes:
+      - mongo-replSet-mongo3:/data/db
+    restart: always
+    command: mongod --replSet my-mongo-set
+
+  mongosh:
+    image: mongo:latest
+    container_name: mongosh
+    networks:
+      - mongors-networks
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    command: >
+      mongosh --host mongo1 --port 27017 --eval "
+        const config = {
+          _id: 'my-mongo-set',
+          members: [
+            { _id: 0, host: 'mongo1:27017'},
+            { _id: 1, host: 'mongo2:27017'},
+            { _id: 2, host: 'mongo3:27017'}
+          ]}
+        rs.reconfig(config, {force: true});          
+      "
+  web:
+    build: .
+    image: server-image-for-shorturl
+    container_name: server-container-for-shortURL
+    networks:
+      - mongors-networks
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+      - mongosh
+
+networks:
+  mongors-networks:
+    driver: bridge
+
+volumes:
+  mongo-replSet-mongo1:
+  mongo-replSet-mongo2:
+  mongo-replSet-mongo3:
