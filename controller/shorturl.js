@@ -1,4 +1,6 @@
-exports.generateShortUrl = function (shortenURL) {
+const Url = require('../models/url')
+
+const generateShortUrl = function (shortenURL) {
   const BASE_62_CHAR = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
   const MAX = 61
   const MIN = 0
@@ -9,4 +11,14 @@ exports.generateShortUrl = function (shortenURL) {
     result += chooseChar
   }
   return result
+}
+
+exports.generateUniqueShortUrl = async function () {
+  let shortUrl = generateShortUrl(5);
+  let duplicate = await Url.findOne({ shortUrl });
+  while (duplicate) {
+    shortUrl = generateShortUrl(5);
+    duplicate = await Url.findOne({ shortUrl });
+  }
+  return shortUrl;
 }
