@@ -20,10 +20,15 @@
    docker-compose up -d
    ```
 
-4. 若看見此行訊息則代表順利運行，打開瀏覽器進入到以下網址
+4. 若看見此行訊息則代表順利運行
 
    ```bash
    Creating server-container-for-shortURL ... done
+   ```
+
+5. 打開瀏覽器進入到以下網址
+   ```bash
+    localhost:3000
    ```
 
 6. 若欲暫停使用
