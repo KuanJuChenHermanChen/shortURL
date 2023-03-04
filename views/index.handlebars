@@ -3,20 +3,23 @@
   <h3>Success! Please use this link:</h3>
   <p id="generatedURL">localhost:3000/shorten/{{shortURL}}</p>
 </div>
-<button class="copy" onclick="copy()">Copy</button>
-<button class="home" onclick="home()">Back to Home Page</button>
+<button class="copy">Copy</button>
+<button class="home">Back to Home Page</button>
 
 <script>
-  function copy() {
-    const URL = document.querySelector("#generatedURL")
+  const URL = document.querySelector("#generatedURL");
+  const copyBtn = document.querySelector(".copy");
+  const homeBtn = document.querySelector(".home");
+
+  copyBtn.addEventListener("click", () => {
     navigator.clipboard.writeText(URL.innerText)
       .then(() => alert('copied'))
       .catch(error => console.log(error))
-  }
+  });
 
-  function home() {
-    window.location.href = "/"
-  }
+  homeBtn.addEventListener("click", () => {
+    window.location.href = "/";
+  });
 </script>
 
 {{else}}
