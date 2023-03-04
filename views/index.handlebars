@@ -1,7 +1,7 @@
 {{#if shortURL}}
 <div class="result">
   <h3>Success! Please use this link:</h3>
-  <p id="generatedURL">localhost:3000/{{shortURL}}</p>
+  <p id="generatedURL">localhost:3000/shorten/{{shortURL}}</p>
 </div>
 <button class="copy" onclick="copy()">Copy</button>
 <button class="home" onclick="home()">Back to Home Page</button>
@@ -20,7 +20,7 @@
 </script>
 
 {{else}}
-<form action="/" method="POST">
+<form action="/shorten" method="POST">
   <div class="container">
     <input type="url" name="url" placeholder="Input URL here" required />
     <button class="shorten" type="submit">Shorten</button>
